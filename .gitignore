@@ -1,0 +1,12 @@
+# donnees telechargees/generees (regenerer via extraction/extract.py)
+data/
+
+# notes personnelles
+notesperso.txt
+
+# python
+__pycache__/
+*.pyc
+
+# jupyter
+.ipynb_checkpoints/
