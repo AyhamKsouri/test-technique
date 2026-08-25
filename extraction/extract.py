@@ -5,7 +5,11 @@ Extraction Paris Open Data - API Explore v2.1
 Ordre d'execution recommande :
     python extract.py schema                  # 1. inspecter les champs (A FAIRE EN PREMIER)
     python extract.py export                  # 2. terrasses + quartiers (fichiers complets)
-    python extract.py anomalies <champ> [an]  # 3. agregation dans-ma-rue cote serveur
+    python extract.py export-signalements      # 3. dans-ma-rue en entier (~500 Mo, requis
+                                                #    par le notebook d'analyse principal)
+    python extract.py anomalies <champ> [an]  # 4. agregation dans-ma-rue cote serveur,
+                                                #    alternative legere a export-signalements
+                                                #    quand on n'a besoin que d'un comptage
 
 Dependances : pip install requests
 """
@@ -133,10 +137,19 @@ def cmd_export():
     download(QUARTIERS, "geojson")
 
     print(
-        "\n>> dans-ma-rue-historique n'est VOLONTAIREMENT pas exporte ici : "
-        "plusieurs millions de lignes.\n"
-        ">> Utilise `python extract.py anomalies <champ>` pour agreger cote serveur."
+        "\n>> dans-ma-rue n'est PAS exporte par cette commande (1,47M lignes, ~500 Mo) : "
+        "utilise `python extract.py export-signalements` pour le telecharger en entier "
+        "(necessaire pour le notebook d'analyse), ou `python extract.py anomalies <champ>` "
+        "pour n'en recuperer qu'une agregation cote serveur."
     )
+
+
+def cmd_export_signalements():
+    """Telecharge dans-ma-rue en entier : requis par 03_analyse_hypotheses.ipynb, qui a
+    besoin des lignes individuelles (jointure par adresse) et pas seulement d'un comptage
+    agrege. Fichier volumineux (~500 Mo) -- separe de `export` intentionnellement."""
+    print("Dans Ma Rue (CSV complet, ~500 Mo -- peut prendre plusieurs minutes) :")
+    download(ANOMALIES, "csv")
 
 
 # ---------------------------------------------------------------- 3. agregation
@@ -216,6 +229,8 @@ if __name__ == "__main__":
         cmd_schema()
     elif cmd == "export":
         cmd_export()
+    elif cmd == "export-signalements":
+        cmd_export_signalements()
     elif cmd == "anomalies":
         cmd_anomalies(*sys.argv[2:])
     else:

@@ -54,10 +54,10 @@ Toutes les données proviennent de l'API [Open Data Paris](https://opendata.pari
 pip install requests pandas numpy scipy statsmodels geopandas matplotlib
 
 cd extraction
-python extract.py schema     # inspecter les champs disponibles
-python extract.py export     # telecharge terrasses-autorisations et quartier_paris
-
-# dans-ma-rue (1.47M lignes) : export complet via l'API, utilise par le notebook d'analyse
+python extract.py schema                # inspecter les champs disponibles
+python extract.py export                # telecharge terrasses-autorisations et quartier_paris
+python extract.py export-signalements   # telecharge dans-ma-rue en entier (~500 Mo,
+                                         # necessaire au notebook d'analyse principal)
 ```
 
 Les notebooks se trouvent dans `data-understanding/` et attendent les fichiers dans un
